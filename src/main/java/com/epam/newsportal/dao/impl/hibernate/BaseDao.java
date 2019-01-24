@@ -3,18 +3,16 @@ package com.epam.newsportal.dao.impl.hibernate;
 import com.epam.newsportal.dao.AbstractDao;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 
-@Transactional(transactionManager = "transactionManager")
+@Transactional
 public abstract class BaseDao <T extends Serializable> implements AbstractDao<T> {
     private Class<T> entityClass;
 
-    @Autowired
     private SessionFactory sessionFactory;
 
     public BaseDao() {
@@ -22,8 +20,12 @@ public abstract class BaseDao <T extends Serializable> implements AbstractDao<T>
                 .getGenericSuperclass()).getActualTypeArguments()[0];
     }
 
-    protected SessionFactory getSessionFactory() {
+    public SessionFactory getSessionFactory() {
         return sessionFactory;
+    }
+
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
     @Override
@@ -52,5 +54,4 @@ public abstract class BaseDao <T extends Serializable> implements AbstractDao<T>
         Session session = sessionFactory.getCurrentSession();
         return session.get(entityClass, id);
     }
-
 }

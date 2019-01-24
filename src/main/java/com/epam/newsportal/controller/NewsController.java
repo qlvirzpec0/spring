@@ -4,6 +4,7 @@ import com.epam.newsportal.dto.News;
 import com.epam.newsportal.security.AuthorPrincipal;
 import com.epam.newsportal.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -22,9 +23,14 @@ import java.util.List;
 
 @Controller
 public class NewsController {
-    @Autowired
     private NewsService newsService;
     private final DateFormat FORMATTER = new SimpleDateFormat("yyyy-MM-dd");
+
+    @Autowired
+    @Qualifier("newsService")
+    public void setNewsService(NewsService newsService) {
+        this.newsService = newsService;
+    }
 
     @RequestMapping(path = "/news/{date}/{newsUri}", method = RequestMethod.GET)
     public ModelAndView showNewsByUri(@PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) final Date date,

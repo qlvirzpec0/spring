@@ -2,9 +2,7 @@ package com.epam.newsportal.dao.impl.hibernate;
 
 import com.epam.newsportal.dao.NewsDao;
 import com.epam.newsportal.dto.News;
-import com.epam.newsportal.dto.News_;
 import org.hibernate.Session;
-import org.springframework.stereotype.Repository;
 
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
@@ -12,7 +10,6 @@ import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
-@Repository("newsDao")
 public class NewsDaoImpl extends BaseDao<News> implements NewsDao {
 
     @Override
@@ -23,8 +20,8 @@ public class NewsDaoImpl extends BaseDao<News> implements NewsDao {
         CriteriaQuery<News> criteriaQuery = builder.createQuery(News.class);
         Root<News> root = criteriaQuery.from(News.class);
         criteriaQuery.select(root).where(
-                builder.equal(root.get(News_.uri), uri),
-                builder.equal(root.get(News_.changeDate), date)
+                builder.equal(root.get("uri"), uri),
+                builder.equal(root.get("changeDate"), date)
         );
 
         return session.createQuery(criteriaQuery).getSingleResult();

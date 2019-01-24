@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.epam.newsportal.dto">
+    <class name="News" table="NEWS">
+        <id name="id" column="ID">
+            <generator class="sequence">
+                <param name="sequence_name">
+                    NEWS_SEQ
+                </param>
+            </generator>
+        </id>
+        <property name="title" column="TITLE" />
+        <property name="brief" column="BRIEF" />
+        <property name="content" column="CONTENT" />
+        <property name="changeDate" column="CHANGE_DATE" type="date"/>
+        <property name="uri" column="URI" />
+
+        <many-to-one name="author" class="com.epam.newsportal.dto.Author" fetch="select" lazy="false">
+            <column name="AUTHOR_ID" not-null="true" />
+        </many-to-one>
+
+        <!--<many-to-one name="author" class="com.epam.newsportal.dto.Author" column="AUTHOR_ID" cascade="all" />-->
+        <!--<join table="AUTHOR" inverse="true">-->
+            <!--<key column="AUTHOR_ID"/>-->
+            <!--<many-to-one name="author" column="AUTHOR_ID" not-null="true" insert="false" update="false"/>-->
+        <!--</join>-->
+    </class>
+</hibernate-mapping>

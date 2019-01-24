@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    <context:component-scan base-package="com.epam.newsportal"/>
+    <context:property-placeholder location="classpath*:datasource.properties" ignore-unresolvable="true"/>
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="${ds.db-driver}"/>
+        <property name="url" value="${ds.url}"/>
+        <property name="username" value="${ds.username}"/>
+        <property name="password" value="${ds.password}"/>
+    </bean>
+    <bean id="sessionFactory"
+          class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation" value="classpath:hibernate.cfg.xml"/>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="current_session_context_class">${current_session_context_class}</prop>
+                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+            </props>
+        </property>
+    </bean>
+    <tx:annotation-driven/>
+    <bean id="transactionManager"
+          class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <bean id="baseDao" class="com.epam.newsportal.dao.impl.hibernate.BaseDao" abstract="true"/>
+    <bean id="newsDao" class="com.epam.newsportal.dao.impl.hibernate.NewsDaoImpl" parent="baseDao">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+    <bean id="authorDao" class="com.epam.newsportal.dao.impl.hibernate.AuthorDaoImpl" parent="baseDao">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
+</beans>

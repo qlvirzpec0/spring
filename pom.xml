@@ -184,7 +184,7 @@
                 <configuration>
                     <webResources>
                         <resource>
-                            <directory>webapp</directory>
+                            <directory>src/main/webapp</directory>
                             <includes>
                                 <include>**/*.js</include>
                             </includes>
